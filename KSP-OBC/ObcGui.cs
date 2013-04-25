@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 
-namespace KSPOBC
+namespace KSP_OBC
 {
 	
 	public class ObcGui {

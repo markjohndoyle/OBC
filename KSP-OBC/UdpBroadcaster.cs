@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace KSP_OBC {
@@ -15,21 +14,22 @@ namespace KSP_OBC {
      * UDP send link for transmitting raw data out of the game engine.
      */
     class UdpBroadcaster : MonoBehaviour, SendLink {
-
-        private bool broadcasting = false;
         private Socket udpSocket;
+        private IPEndPoint ipEndpoint;
+        private IPAddress broadcast;
 
-        UdpBroadcaster() {
-            udpSocket = new Socket(SocketType.Dgram, ProtocolType.Udp);
+        public UdpBroadcaster() {
+            udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            broadcast = IPAddress.Parse("192.168.3.150");
+            ipEndpoint = new IPEndPoint(broadcast, 11000);
         }
 
         public void send(byte[] rawOut) {
-            udpSocket.Send(rawOut);
+            udpSocket.SendTo(rawOut, ipEndpoint);
         }
 
         void OnDestroy() {
             Debug.Log("Stopping thread and closing UDP socket");
-            broadcasting = false;
             udpSocket.Close();
         }
     }

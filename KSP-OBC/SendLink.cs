@@ -5,6 +5,6 @@ using System.Text;
 
 namespace KSP_OBC {
     interface SendLink {
-        public void send(byte[] rawOut);
+        void send(byte[] rawOut);
     }
 }
