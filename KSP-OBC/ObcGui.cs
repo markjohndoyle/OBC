@@ -16,6 +16,7 @@ namespace KSPOBC
             get { return vessel; }
             set { vessel = value; }
         }
+
 		private String verticalSpeed = "--";
 		
 		private void createObcWindow(int windowID) {
