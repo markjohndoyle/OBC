@@ -11,6 +11,7 @@ namespace KSP_OBC {
 	 * Mark Doyle
 	 */
 	public class OBC : PartModule {
+        private static int counter = 0;
 		private ObcGui gui;
 
         private TmGenerator tmGenerator;
@@ -20,8 +21,10 @@ namespace KSP_OBC {
 		 */
 	    public override void OnStart(StartState state) {
 			print("OBC starting...");
-            setupGui();            
-            setupTmGenerator();
+            if (state != StartState.Editor) {
+                setupGui();
+                setupTmGenerator();
+            }
 	    }
 
         private void setupGui() {
@@ -30,6 +33,7 @@ namespace KSP_OBC {
         }
 
         private void setupTmGenerator() {
+            print("Creating TM generator " + counter++);
             tmGenerator = new TmGenerator();
             tmGenerator.tmVessel = vessel;
             tmGenerator.startTelemetry();
@@ -44,12 +48,12 @@ namespace KSP_OBC {
         public override void OnUpdate() {
             if (vessel != null) {
                 if (tmGenerator.tmVessel == null) {
+                    print("Resetting vessel reference on tm generator");
                     tmGenerator.tmVessel = vessel;
                 }
                 tmGenerator.verticalSpeed = vessel.verticalSpeed;
             }
         }
-
 	}
 	
 }

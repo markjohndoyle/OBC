@@ -40,8 +40,9 @@ namespace KSP_OBC  {
         private void sendTm() {
             while (broadcasting) {
                 if (HighLogic.LoadedSceneIsFlight) {
-                    Debug.Log("Sending TM packet to sendlink");
                     byte[] buffer = BitConverter.GetBytes(vspeed);
+                    Array.Reverse(buffer);
+                    Debug.Log("Sending TM packet to sendlink for vspeed: " + vspeed);
                     sendLink.send(tmFactory.createTelemetry(BasicIdTelemetryFactory.VSPEED, buffer));
                 }
                 Debug.Log("Sleeping broadcast thread");
