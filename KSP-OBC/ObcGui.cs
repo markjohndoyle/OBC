@@ -44,8 +44,8 @@ namespace KSP_OBC
 		}
 			
 		public void drawGui() {
-            windowPos = GUILayout.Window(1, windowPos, createObcWindow, "OBC display", GUILayout.MinWidth(100));
             updateValues();
+            windowPos = GUILayout.Window(1, windowPos, createObcWindow, "OBC display", GUILayout.MinWidth(100));
 		}
 	}
 	

@@ -20,11 +20,12 @@ namespace KSP_OBC {
 
         public UdpBroadcaster() {
             udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            broadcast = IPAddress.Parse("192.168.3.150");
-            ipEndpoint = new IPEndPoint(broadcast, 11000);
+            broadcast = IPAddress.Parse("127.0.0.1");
+            ipEndpoint = new IPEndPoint(broadcast, 12509);
         }
 
         public void send(byte[] rawOut) {
+            print("sending " + rawOut);
             udpSocket.SendTo(rawOut, ipEndpoint);
         }
 
