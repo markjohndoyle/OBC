@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KSP_OBC {
+
     class BasicIdTelemetryFactory : TelemetryFactory {
 
+        public static int VESSEL = 0;
         public static int VSPEED = 1;
 
         public byte[] createTelemetry(int id, byte[] payload) {
@@ -15,11 +17,7 @@ namespace KSP_OBC {
             byte[] idBytes = BitConverter.GetBytes(id);
             Array.Reverse(idBytes);
 
-            //Find unix timestamp (seconds since 01/01/1970)
-            long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
-            ticks /= 10000000; //Convert windows ticks to seconds
-            byte[] timeStampBytes = BitConverter.GetBytes(ticks);
-            Array.Reverse(timeStampBytes);
+            byte[] timeStampBytes = createTimestamp();
 
             Array.Copy(idBytes, 0, tm, 0, idBytes.Length);
             Array.Copy(timeStampBytes, 0, tm, idBytes.Length, timeStampBytes.Length);
@@ -27,6 +25,14 @@ namespace KSP_OBC {
             return tm;
         }
 
-
+        private byte[] createTimestamp() {
+            // Find unix timestamp (seconds since 01/01/1970)
+            long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
+            // Convert windows ticks to seconds
+            ticks /= 10000000;
+            byte[] timeStampBytes = BitConverter.GetBytes(ticks);
+            Array.Reverse(timeStampBytes);
+            return timeStampBytes;
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace KSP_OBC {
         private void setupTmGenerator() {
             print("Creating TM generator " + counter++);
             tmGenerator = new TmGenerator();
-            tmGenerator.tmVessel = vessel;
+            tmGenerator.vessel = vessel;
             tmGenerator.startTelemetry();
         }
 
@@ -47,11 +47,19 @@ namespace KSP_OBC {
 
         public override void OnUpdate() {
             if (vessel != null) {
-                if (tmGenerator.tmVessel == null) {
+                if (tmGenerator.vessel == null) {
                     print("Resetting vessel reference on tm generator");
-                    tmGenerator.tmVessel = vessel;
+                    tmGenerator.vessel = vessel;
                 }
                 tmGenerator.verticalSpeed = vessel.verticalSpeed;
+                tmGenerator.acceleration = vessel.acceleration;
+                tmGenerator.altitude = vessel.altitude;
+                tmGenerator.angularMomentum = vessel.angularMomentum;
+                tmGenerator.angularVelocity = vessel.angularVelocity;
+                tmGenerator.atmDensity = vessel.atmDensity;
+                tmGenerator.currentStage = vessel.currentStage;
+                tmGenerator.latitude = vessel.latitude;
+                tmGenerator.longitude = vessel.longitude;
             }
         }
 	}
