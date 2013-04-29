@@ -44,7 +44,9 @@ namespace KSP_OBC  {
             while (broadcasting) {
                 if (HighLogic.LoadedSceneIsFlight) {
                     byte[] buffer = createCompleteVesselTmArray();
-                    sendLink.send(tmFactory.createTelemetry(BasicIdTelemetryFactory.VESSEL, buffer));
+                    byte[] tm = tmFactory.createTelemetry(BasicIdTelemetryFactory.VESSEL, buffer);
+                    //Array.Reverse(tm);
+                    sendLink.send(tm);
                 }
                 Thread.Sleep(TimeSpan.FromSeconds(2));
             }
@@ -52,7 +54,7 @@ namespace KSP_OBC  {
         }
 
         /**
-         * Crear
+         * Creates an array of parameters comprising of the complete vessel payload.
          */
         private byte[] createCompleteVesselTmArray() {
             Debug.Log("creating complete vessel tm");
@@ -63,34 +65,34 @@ namespace KSP_OBC  {
             Debug.Log(writer.Length + " length of writer");
 
             try {
-                Debug.Log("Adding acceleration");
+                Debug.Log("Adding acceleration " + acceleration);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(acceleration.x));
                 writeParameterToBuffer(writer, BitConverter.GetBytes(acceleration.y));
                 writeParameterToBuffer(writer, BitConverter.GetBytes(acceleration.z));
 
-                Debug.Log("Adding angular vel");
+                Debug.Log("Adding angular vel " + angularVelocity);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(angularVelocity.x));
                 writeParameterToBuffer(writer, BitConverter.GetBytes(angularVelocity.y));
                 writeParameterToBuffer(writer, BitConverter.GetBytes(angularVelocity.z));
 
-                Debug.Log("Adding angular mom");
+                Debug.Log("Adding angular mom " + angularMomentum);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(angularMomentum.x));
                 writeParameterToBuffer(writer, BitConverter.GetBytes(angularMomentum.y));
                 writeParameterToBuffer(writer, BitConverter.GetBytes(angularMomentum.z));
 
-                Debug.Log("Adding stage");
+                Debug.Log("Adding stage " + currentStage);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(currentStage));
 
-                Debug.Log("Adding vspeed");
+                Debug.Log("Adding vspeed " + verticalSpeed);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(verticalSpeed));
 
-                Debug.Log("Adding altitude");
+                Debug.Log("Adding altitude " + altitude);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(altitude));
 
-                Debug.Log("Adding longitude");
+                Debug.Log("Adding longitude " + longitude);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(longitude));
 
-                Debug.Log("Adding latitude");
+                Debug.Log("Adding latitude " + latitude);
                 writeParameterToBuffer(writer, BitConverter.GetBytes(latitude));
             }
             catch (Exception e) {

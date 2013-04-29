@@ -14,14 +14,20 @@ namespace KSP_OBC {
 
         public byte[] createTelemetry(int id, byte[] payload) {
             byte[] tm = new byte[sizeof(int) + sizeof(long) + payload.Length];
+
+            // Add the payload ID as Big endian
             byte[] idBytes = BitConverter.GetBytes(id);
             Array.Reverse(idBytes);
 
+            // Add the generation timestamp as Big endian
             byte[] timeStampBytes = createTimestamp();
+            Array.Reverse(timeStampBytes);
 
+            // Copy the ID, timestamp, and payload into the complete TM packet.
             Array.Copy(idBytes, 0, tm, 0, idBytes.Length);
             Array.Copy(timeStampBytes, 0, tm, idBytes.Length, timeStampBytes.Length);
             Array.Copy(payload, 0, tm, idBytes.Length + timeStampBytes.Length, payload.Length);
+
             return tm;
         }
 
@@ -31,7 +37,6 @@ namespace KSP_OBC {
             // Convert windows ticks to seconds
             ticks /= 10000000;
             byte[] timeStampBytes = BitConverter.GetBytes(ticks);
-            Array.Reverse(timeStampBytes);
             return timeStampBytes;
         }
     }
