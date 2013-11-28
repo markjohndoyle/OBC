@@ -15,8 +15,10 @@ namespace KSP_OBC  {
     class TmGenerator {
         private Thread tmThread;
         private bool broadcasting = false;
+
         private TelemetryFactory tmFactory = new BasicIdTelemetryFactory();
         private SendLink sendLink = new UdpBroadcaster();
+
         public Vessel vessel { get; set; }
 
         public double verticalSpeed { get; set; }
