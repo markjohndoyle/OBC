@@ -1,44 +1,42 @@
-using System;
+using System;//
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using System.Threading;
 
-namespace KSP_OBC
-{
 
-	/**
-	 * 
-	 * Mark Doyle
-	 * Johannes Klug
-	 * 
-	 * */
+namespace KSP_OBC {
+
+	///
+	/// <remarks Mark Doyle />
+	///
 	public class OBC : PartModule {
+        private static int counter = 0;
 		private ObcGui gui;
 
-        private SendLink sendLink;
-        private Thread tmThread;
-        private bool broadcasting = false;
+        private TmGenerator tmGenerator;
 			
-		/**
-		 *
-		 * Called when the part is started by Unity.
-		 * 
-		 * */
+		///
+		/// Called when the part is started by Unity.
+		///
 	    public override void OnStart(StartState state) {
 			print("OBC starting...");
-            base.OnStart(state);
-            gui = new ObcGui();
-            gui.hostVessel = vessel;
-
-            sendLink = new UdpBroadcaster();
-
-            startTelemetry();
+            if (state != StartState.Editor) {
+                setupGui();
+                setupTmGenerator();
+            }
 	    }
 
-        public override void OnFixedUpdate() {
-            base.OnFixedUpdate();
+        private void setupGui() {
+            gui = new ObcGui();
+            gui.hostVessel = vessel;
+        }
+
+        private void setupTmGenerator() {
+            print("Creating TM generator " + counter++);
+            tmGenerator = new TmGenerator();
+            tmGenerator.vessel = vessel;
+            tmGenerator.startTelemetry();
         }
 
         private void OnGUI() {
@@ -47,26 +45,21 @@ namespace KSP_OBC
             }
         }
 
-
-        private void startTelemetry() {
-            tmThread = new Thread(new ThreadStart(sendTm));
-            broadcasting = true;
-            tmThread.Start();
-        }
-
-        private void stopSendingTelemetry() {
-            broadcasting = false;
-        }
-
-        private void sendTm() {
-            while (broadcasting) {
-                byte[] buffer;
-                buffer = BitConverter.GetBytes(vessel.verticalSpeed);
-                sendLink.send(buffer);
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+        public override void OnUpdate() {
+            if (vessel != null) {
+                CelestialBody cbody = vessel.mainBody;
+                tmGenerator.verticalSpeed = vessel.verticalSpeed;
+                tmGenerator.acceleration = vessel.acceleration;
+                tmGenerator.altitude = vessel.GetHeightFromSurface();
+                tmGenerator.angularMomentum = vessel.angularMomentum;
+                tmGenerator.angularVelocity = vessel.angularVelocity;
+                tmGenerator.atmDensity = vessel.atmDensity;
+                tmGenerator.currentStage = vessel.currentStage;
+                tmGenerator.latitude = cbody.GetLatitude(vessel.findWorldCenterOfMass());
+                tmGenerator.longitude = cbody.GetLongitude(vessel.findWorldCenterOfMass());
             }
         }
-		
+
 	}
 	
 }

@@ -45,11 +45,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicIdTelemetryFactory.cs" />
+    <Compile Include="TelemetryFactory.cs" />
+    <Compile Include="telemetry\CompleteVesselLayout.cs" />
+    <Compile Include="TmGenerator.cs" />
     <Compile Include="UdpBroadcaster.cs" />
-    <Compile Include="Obc.cs" />
+    <Compile Include="OBC.cs" />
     <Compile Include="ObcGui.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendLink.cs" />
+    <Compile Include="utility\KerbalLonLatNormaliser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
